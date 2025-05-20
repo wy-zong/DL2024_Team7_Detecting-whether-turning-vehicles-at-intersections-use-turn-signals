@@ -1,1 +1,2 @@
-# DL2024_Team7_Detecting-whether-turning-vehicles-at-intersections-use-turn-signals
+# 深度學習概論期末專案
+## 偵測路口轉彎車輛有無打方向燈
