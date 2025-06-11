@@ -8,7 +8,7 @@
 | **data_process.py** | 使用 `YOLOv8` 的 `model.track` 追蹤車輛軌跡，判斷直行／左轉／右轉；當偵測到左／右轉時，擷取該時刻 ±N 幀並存圖，作為後續人工標註素材。 |
 | **train.py** | 讀取 `data.yaml` 與標註影像資料，訓練 YOLOv8 模型；最佳權重輸出至 `best.pt`。 |
 | **judge_turn_correctness.py** | 重複 `data_process.py` 的轉向判斷，同時以 **訓練後模型** 辨識方向燈；若轉向方向與方向燈相符，記錄為為正確轉彎。 |
-| **data.yaml** | Roboflow 產生的資料集設定檔，定義三類別：`left_signal`、`right_signal`。 |
+| **data.yaml** | Roboflow 產生的資料集設定檔，定義二類別：`left_signal`、`right_signal`。 |
 | **best.pt** | 已訓練完成、效果最佳的 YOLOv8 權重檔。 |
 
 ---
