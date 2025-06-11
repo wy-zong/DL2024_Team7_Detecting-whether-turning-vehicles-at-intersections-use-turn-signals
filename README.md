@@ -1,61 +1,25 @@
 # 深度學習概論期末專案  
 ## 偵測路口轉彎車輛是否正確使用方向燈
 
-> 使用 **YOLOv8** + 視覺後處理邏輯，自動判斷轉彎車輛有無開啟方向燈，並提供一條龍的資料擴充與再訓練流程。
+### 程式檔案功能
+| 檔案 | 功能說明 |
+|------|---------|
+| **merge_video.py** | 將多段原始路口影片合併為單一影片，方便後續統一處理。 |
+| **data_process.py** | 使用 `YOLOv8` 的 `model.track` 追蹤車輛軌跡，判斷直行／左轉／右轉；當偵測到左／右轉時，擷取該時刻 ±N 幀並存圖，作為後續人工標註素材。 |
+| **train.py** | 讀取 `data.yaml` 與標註影像資料，訓練 YOLOv8 模型；最佳權重輸出至 `best.pt`。 |
+| **judge_turn_correctness.py** | 重複 `data_process.py` 的轉向判斷，同時以 **訓練後模型** 辨識方向燈；若轉向方向與方向燈不符，記錄為違規。 |
+| **data.yaml** | Roboflow 產生的資料集設定檔，定義三類別：`left_signal`、`no_signal`、`right_signal`。 |
+| **best.pt** | 已訓練完成、效果最佳的 YOLOv8 權重檔。 |
 
 ---
 
-## 目錄
-- [專案特色](#專案特色)
-- [快速開始](#快速開始)
-- [資料準備](#資料準備)
-- [模型訓練](#模型訓練)
-- [使用流程](#使用流程)
-  - [1. 多影片合併 (`merge_video.py`)](#1-多影片合併-merge_videopy)
-  - [2. 產生軌跡與擷取標註影格 (`data_process.py`)](#2-產生軌跡與擷取標註影格-data_processpy)
-  - [3. 判斷轉彎正確性 (`judge_turn_correctness.py`)](#3-判斷轉彎正確性-judge_turn_correctnesspy)
-- [檔案結構](#檔案結構)
-- [套件需求](#套件需求)
-- [貢獻方式](#貢獻方式)
-- [License](#license)
-- [致謝](#致謝)
+### 工作流程
+1. **影片蒐集**  
+   - 取得多段監視器或行車記錄器影片，放入 `datasets/raw_videos/`。
 
----
-
-## 專案特色
-| 功能 | 說明 |
-|------|------|
-| **即時車輛偵測** | 以 YOLOv8 低延遲偵測車輛與方向燈狀態 |
-| **軌跡追蹤與方向判斷** | `model.track` + 自定邏輯判斷直行／左轉／右轉 |
-| **自動擷取標註影格** | 偵測轉彎時擷取前後影格，快速產生 Roboflow 標註素材 |
-| **轉彎正確性比對** | 轉向方向 vs. 方向燈狀態，自動輸出違規清單 |
-| **資料循環再訓練** | `data_process` → 標註 → `train.py` → 更新 `best.pt` |
-
----
-
-## 快速開始
-
-```bash
-# 1. 下載專案
-git clone https://github.com/<your-name>/turn-signal-detection.git
-cd turn-signal-detection
-
-# 2. 建立虛擬環境
-conda create -n turn-signal python=3.10 -y
-conda activate turn-signal
-
-# 3. 安裝套件
-pip install -r requirements.txt
-
-# 4. 放置資料 / 權重
-#   ├── datasets/          (影片與標註資料)
-#   └── weights/best.pt    (已訓練好的模型)
-
-# 5. 執行範例流程
-python merge_video.py --input_dir datasets/raw_videos --output merged.mp4
-python data_process.py --video merged.mp4 --weights weights/best.pt
-python judge_turn_correctness.py --video merged.mp4 --weights weights/best.pt
-
-
-
-
+2. **影片合併**  
+   ```bash
+   python merge_video.py \
+     --input_dir datasets/raw_videos \
+     --ext mp4 \
+     --output merged.mp4
