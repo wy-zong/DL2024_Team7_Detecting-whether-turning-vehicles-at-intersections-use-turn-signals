@@ -13,13 +13,16 @@
 
 ---
 
-### 工作流程
-1. **影片蒐集**  
-   - 取得多段監視器或行車記錄器影片，放入 `datasets/raw_videos/`。
 
-2. **影片合併**  
-   ```bash
-   python merge_video.py \
-     --input_dir datasets/raw_videos \
-     --ext mp4 \
-     --output merged.mp4
+## 背景
+不當的駕駛行為每年造成巨大的傷亡，如何高效的取締違規愈發重要。
+## 目標
+設計一個基於yolo模型的視覺系統，辨識路口的轉彎車輛是否有正確使用方向燈
+
+## 資料集
+資料集由課程負責人提供
+使用Roboflow進行人工標註
+
+## 模型
+使用yolo v8進行訓練
+
