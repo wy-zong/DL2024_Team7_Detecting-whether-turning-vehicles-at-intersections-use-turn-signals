@@ -24,5 +24,6 @@
 使用Roboflow進行人工標註
 
 ## 模型
-使用yolo v8進行訓練
+使用yolo v8進行訓練 
+使用yolo的track功能進行軌跡追蹤
 
